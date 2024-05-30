@@ -1,0 +1,35 @@
+[gd_scene load_steps=6 format=3 uid="uid://dm8cc814ingo7"]
+
+[ext_resource type="Material" uid="uid://5f2xwvp7lwof" path="res://textures/playable_cell.tres" id="1_6kaww"]
+[ext_resource type="Material" uid="uid://dh7pqxl620nms" path="res://textures/nonplayable_cell.tres" id="1_bw2qi"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_3yy3l"]
+material = ExtResource("1_6kaww")
+size = Vector3(1, 0.1, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_2cs63"]
+size = Vector3(1, 0.1, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_v2cer"]
+material = ExtResource("1_bw2qi")
+size = Vector3(1, 0.1, 1)
+
+[node name="board_tiles" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.8, 0)
+
+[node name="playable_tile" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.59738, 0, 0)
+mesh = SubResource("BoxMesh_3yy3l")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="playable_tile"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="playable_tile/StaticBody3D"]
+shape = SubResource("BoxShape3D_2cs63")
+
+[node name="nonplayable_tile" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_v2cer")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="nonplayable_tile"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="nonplayable_tile/StaticBody3D"]
+shape = SubResource("BoxShape3D_2cs63")

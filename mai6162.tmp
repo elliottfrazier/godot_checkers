@@ -1,0 +1,33 @@
+[gd_scene load_steps=6 format=3 uid="uid://ddkwga1lmhp0p"]
+
+[ext_resource type="PackedScene" uid="uid://d3dxwg58gt7fd" path="res://board_gridmap.tscn" id="1_127t7"]
+[ext_resource type="PackedScene" uid="uid://dwsh5cbh67r5s" path="res://piece.tscn" id="2_jten8"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_k3jls"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_wlfdo"]
+sky_material = SubResource("ProceduralSkyMaterial_k3jls")
+
+[sub_resource type="Environment" id="Environment_y80mc"]
+background_mode = 2
+sky = SubResource("Sky_wlfdo")
+tonemap_mode = 2
+glow_enabled = true
+
+[node name="Main" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_y80mc")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(-1, 4.37114e-08, -7.57103e-08, 0, 0.866025, 0.5, 8.74228e-08, 0.5, -0.866025, 0, 6, -9)
+fov = 54.7
+
+[node name="BoardGridMap" parent="." instance=ExtResource("1_127t7")]
+piece_scene = ExtResource("2_jten8")
+
+[node name="red_piece" parent="." instance=ExtResource("2_jten8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 1, 1.5)
+visible = false
