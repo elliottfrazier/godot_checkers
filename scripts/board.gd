@@ -76,6 +76,15 @@ func reset_pieces():
 	add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(5,5)))
 	add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(7,5)))
 	
+	
+	
+	#test Multi-jump
+	#add_child(Piece.new_piece(enums.piece_types.PLAYER, Vector2(2,0)))
+	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(3,1)))
+	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(5,3)))
+	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(5,5)))
+	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(1,1)))
+	
 	connect_pieces()
 	
 func connect_pieces():
@@ -93,43 +102,64 @@ func show_all_available_moves():
 	remove_phantoms()
 	currentPiece.piece_selected()
 	jumpAvailable = false
-	var move_possibilites: Array = []
 	
-	var north_moves = [
+	var pieces = get_possibible_moves()
+	
+	for p: Piece in pieces:
+		if (!jumpAvailable or p.type == enums.piece_types.PHANTOM_JUMP):
+			p.make_move.connect(_on_make_move.bind(p))
+			add_child(p)
+
+func get_directional_phantom_piece(v:Vector2) -> Piece:
+	var finalPiece: Piece = null
+	var p = Piece.new_piece(enums.piece_types.PHANTOM, Vector2(currentPiece.grid_position.x+v.x,currentPiece.grid_position.y+v.y))
+	if is_valid_coord(p.grid_position) and no_obstructions(p.grid_position):
+		finalPiece = p
+	else:
+		if is_valid_coord(p.grid_position) and opponent_within_poximity(p.grid_position): #check if piece was in bounds - no point in checking past that point if its not
+			p = Piece.new_piece(enums.piece_types.PHANTOM_JUMP, Vector2(currentPiece.grid_position.x+v.x+v.x,currentPiece.grid_position.y+v.y+v.y))
+			if is_valid_coord(p.grid_position) and no_obstructions(p.grid_position):
+				p = Piece.new_piece(enums.piece_types.PHANTOM_JUMP, Vector2(currentPiece.grid_position.x+v.x+v.x,currentPiece.grid_position.y+v.y+v.y))
+				if is_valid_coord(p.grid_position):
+					finalPiece = p
+					if !jumpAvailable:
+						jumpAvailable = true
+				else: 
+					finalPiece = null
+			else: #must be out of bounds, thus invalid
+				finalPiece = null
+	return finalPiece
+
+func get_possibible_moves() -> Array:
+	var move_possibilites: Array = []
+	var northward_moves = [
 		Vector2(+1,+1),
 		Vector2(-1,+1)
 	]
-	var south_moves = [
+	var southward_moves = [
 		Vector2(-1,-1),
 		Vector2(+1,-1)
 	]
 	
+	#get valid directions based on player/opponent opposing directions
 	if currentPiece.type == enums.piece_types.PLAYER:
-		move_possibilites.append_array(north_moves)
+		move_possibilites.append_array(northward_moves)
 	if currentPiece.type == enums.piece_types.OPPONENT:
-		move_possibilites.append_array(south_moves)
+		move_possibilites.append_array(southward_moves)
+		
 	if currentPiece.isKinged:
 		if currentPiece.type == enums.piece_types.PLAYER:
-			move_possibilites.append_array(south_moves)
+			move_possibilites.append_array(southward_moves)
 		if currentPiece.type == enums.piece_types.OPPONENT:
-			move_possibilites.append_array(north_moves)
+			move_possibilites.append_array(northward_moves)
 		
 	var pieces: Array = []
 	for move in move_possibilites:
-		pieces.append(get_possibible_moves(move))
-
-	for p: Piece in pieces:
-		if (is_valid_coord(p.grid_position) and !jumpAvailable) or (is_valid_coord(p.grid_position) and p.type == enums.piece_types.PHANTOM_JUMP):
-			p.make_move.connect(_on_make_move.bind(p))
-			add_child(p)
-	
-func get_possibible_moves(v:Vector2) -> Piece:
-	var p = Piece.new_piece(enums.piece_types.PHANTOM, Vector2(currentPiece.grid_position.x+v.x,currentPiece.grid_position.y+v.y))
-	if !is_valid_coord(p.grid_position):
-		p = Piece.new_piece(enums.piece_types.PHANTOM_JUMP, Vector2(currentPiece.grid_position.x+v.x+v.x,currentPiece.grid_position.y+v.y+v.y))
-		if !jumpAvailable:
-			jumpAvailable = is_valid_coord(p.grid_position)
-	return p
+		var phantom = get_directional_phantom_piece(move)
+		if phantom != null:
+			pieces.append(phantom)
+		
+	return pieces
 	
 func _on_make_move(piece: Piece):
 	remove_phantoms()
@@ -139,7 +169,10 @@ func _on_make_move(piece: Piece):
 	currentPiece.set_pos_from_grid(piece.grid_position)
 	currentPiece.place_piece()
 	check_win()
-	if jumpedPiece and check_for_future_jumps():
+	#this sets jumpedPiece to true if a jump is found
+	jumpAvailable = false
+	get_possibible_moves()
+	if jumpedPiece and jumpAvailable:
 		show_all_available_moves()
 	else:
 		change_turn()
@@ -168,6 +201,7 @@ func try_for_jump(piece: Piece) -> bool:
 					return true
 	return false
 					
+
 func change_turn():
 	if is_player_turn:
 		is_player_turn = false
@@ -209,6 +243,12 @@ func check_win():
 
 func is_valid_coord(p: Vector2) -> bool:
 	var result = false
-	if p.x >= 0 and p.x < grid_width and p.y >= 0 and p.y < grid_height and grid[p.x][p.y] is String:
+	if p.x >= 0 and p.x < grid_width and p.y >= 0 and p.y < grid_height:
 		result = true
 	return result
+
+func no_obstructions(p: Vector2) -> bool:
+	return grid[p.x][p.y] is String# or grid[p.x][p.y] != currentPiece.type
+
+func opponent_within_poximity(p: Vector2) -> bool:
+	return grid[p.x][p.y] is int and grid[p.x][p.y] != currentPiece.type
