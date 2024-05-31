@@ -175,6 +175,7 @@ func _on_make_move(piece: Piece):
 	if jumpedPiece and jumpAvailable:
 		show_all_available_moves()
 	else:
+		check_if_kinged()
 		change_turn()
 	
 	
@@ -252,3 +253,9 @@ func no_obstructions(p: Vector2) -> bool:
 
 func opponent_within_poximity(p: Vector2) -> bool:
 	return grid[p.x][p.y] is int and grid[p.x][p.y] != currentPiece.type
+	
+func check_if_kinged():
+	if currentPiece.type == enums.piece_types.PLAYER and currentPiece.grid_position.y == grid_height-1:
+		currentPiece.isKinged = true;
+	elif currentPiece.type == enums.piece_types.OPPONENT and currentPiece.grid_position.y == 0:
+		currentPiece.isKinged = true;
