@@ -13,6 +13,7 @@ var phantomMaterial: Material = preload("res://textures/phantom_piece.tres")
 const enums = preload("res://scripts/enums.gd")
 
 var type
+var isKinged = false
 
 const piece_scene: PackedScene = preload("res://checker_piece.tscn")
 
@@ -25,7 +26,7 @@ func _process(delta):
 	if Input.is_action_pressed("ui_right"):
 		pass
 	
-static func new_piece(pieceType , pos: Vector2) -> Piece:
+static func new_piece(pieceType, pos: Vector2) -> Piece:
 	var new_piece: Piece = piece_scene.instantiate()
 	new_piece.type = pieceType
 	new_piece.set_pos_from_grid(pos)
@@ -38,7 +39,7 @@ func set_pos_from_grid(pos: Vector2):
 	position.y = 0.7
 
 func piece_clicked():
-	if type == enums.piece_types.PHANTOM:
+	if type == enums.piece_types.PHANTOM or type == enums.piece_types.PHANTOM_JUMP:
 		make_move.emit()
 	else:
 		check_moves.emit()
@@ -50,6 +51,8 @@ func apply_materials():
 		enums.piece_types.PLAYER:
 			$MeshInstance3D.set_surface_override_material(0, yourMaterial)
 		enums.piece_types.PHANTOM:
+			$MeshInstance3D.set_surface_override_material(0, phantomMaterial)
+		enums.piece_types.PHANTOM_JUMP:
 			$MeshInstance3D.set_surface_override_material(0, phantomMaterial)
 
 func place_piece():

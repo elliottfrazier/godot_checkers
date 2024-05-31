@@ -7,9 +7,10 @@ var grid_width = 8
 var grid_height = 8
 
 var currentPiece: Piece
-var is_player_turn = false
+var is_player_turn = true
 var jump_piece
 var extraTurn
+var jumpAvailable
 
 const enums = preload("res://scripts/enums.gd")
 
@@ -44,99 +45,36 @@ func setup_pieces():
 	printGrid()
 	
 func reset_pieces():
-	#add_child(Piece.new_piece(enums.piece_types.PLAYER, Vector2(0,0)))
-	#add_child(Piece.new_piece(enums.piece_types.PLAYER, Vector2(2,0)))
-	#add_child(Piece.new_piece(enums.piece_types.PLAYER, Vector2(4,0)))
-	#add_child(Piece.new_piece(enums.piece_types.PLAYER, Vector2(6,0)))
-	#
-	#add_child(Piece.new_piece(enums.piece_types.PLAYER, Vector2(1,1)))
-	#add_child(Piece.new_piece(enums.piece_types.PLAYER, Vector2(3,1)))
-	#add_child(Piece.new_piece(enums.piece_types.PLAYER, Vector2(5,1)))
-	#add_child(Piece.new_piece(enums.piece_types.PLAYER, Vector2(7,1)))
-	#
-	#add_child(Piece.new_piece(enums.piece_types.PLAYER, Vector2(0,2)))
-	#add_child(Piece.new_piece(enums.piece_types.PLAYER, Vector2(2,2)))
-	#add_child(Piece.new_piece(enums.piece_types.PLAYER, Vector2(4,2)))
-	#add_child(Piece.new_piece(enums.piece_types.PLAYER, Vector2(6,2)))
-	#
-	##Opponent pieces:
-	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(1,7)))
-	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(3,7)))
-	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(5,7)))
-	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(7,7)))
-	#
-	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(0,6)))
-	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(2,6)))
-	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(4,6)))
-	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(6,6)))
-	#
-	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(1,5)))
-	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(3,5)))
-	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(5,5)))
-	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(7,5)))
+	add_child(Piece.new_piece(enums.piece_types.PLAYER, Vector2(0,0)))
+	add_child(Piece.new_piece(enums.piece_types.PLAYER, Vector2(2,0)))
+	add_child(Piece.new_piece(enums.piece_types.PLAYER, Vector2(4,0)))
+	add_child(Piece.new_piece(enums.piece_types.PLAYER, Vector2(6,0)))
 	
-	#---------------------
-	#TEST AREA
-	#---------------------
+	add_child(Piece.new_piece(enums.piece_types.PLAYER, Vector2(1,1)))
+	add_child(Piece.new_piece(enums.piece_types.PLAYER, Vector2(3,1)))
+	add_child(Piece.new_piece(enums.piece_types.PLAYER, Vector2(5,1)))
+	add_child(Piece.new_piece(enums.piece_types.PLAYER, Vector2(7,1)))
 	
-	#test win
-	#add_child(Piece.new_piece(enums.piece_types.PLAYER, Vector2(0,0)))
-	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(1,1)))
+	add_child(Piece.new_piece(enums.piece_types.PLAYER, Vector2(0,2)))
+	add_child(Piece.new_piece(enums.piece_types.PLAYER, Vector2(2,2)))
+	add_child(Piece.new_piece(enums.piece_types.PLAYER, Vector2(4,2)))
+	add_child(Piece.new_piece(enums.piece_types.PLAYER, Vector2(6,2)))
 	
-	#test Multi-jump
-	#add_child(Piece.new_piece(enums.piece_types.PLAYER, Vector2(2,0)))
-	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(3,1)))
-	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(5,3)))
-	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(5,5)))
-	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(1,1)))
-	
-	#corner
-	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(0,0)))
-	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(1,0)))
-	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(2,0)))
-	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(3,0)))
-	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(4,0)))
-	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(0,0)))
-	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(0,1)))
-	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(0,2)))
-	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(0,3)))
-	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(0,4)))
-	
-	#test2
-	#add_child(Piece.new_piece(enums.piece_types.PLAYER, Vector2(0,2)))
-	#add_child(Piece.new_piece(enums.piece_types.PLAYER, Vector2(3,3)))
-	#add_child(Piece.new_piece(enums.piece_types.PLAYER, Vector2(4,2)))
-	#add_child(Piece.new_piece(enums.piece_types.PLAYER, Vector2(6,2)))
-	#
-	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(1,5)))
-	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(2,4)))
-	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(5,5)))
-	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(7,5)))
-	
-	#edge test
-	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(0,0)))
-	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(2,0)))
-	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(4,0)))
-	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(6,0)))
-	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(7,1)))
-	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(0,2)))
-	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(7,3)))
-	
+	#Opponent pieces:
 	add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(1,7)))
 	add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(3,7)))
 	add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(5,7)))
 	add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(7,7)))
-	add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(0,6)))
-	add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(7,5)))
-	add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(0,4)))
 	
-
-	add_child(Piece.new_piece(enums.piece_types.PLAYER, Vector2(2,6)))
-	add_child(Piece.new_piece(enums.piece_types.PLAYER, Vector2(4,6)))
-	add_child(Piece.new_piece(enums.piece_types.PLAYER, Vector2(6,6)))
-	add_child(Piece.new_piece(enums.piece_types.PLAYER, Vector2(6,4)))
-	add_child(Piece.new_piece(enums.piece_types.PLAYER, Vector2(1,5)))
-	add_child(Piece.new_piece(enums.piece_types.PLAYER, Vector2(1,3)))
+	add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(0,6)))
+	add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(2,6)))
+	add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(4,6)))
+	add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(6,6)))
+	
+	add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(1,5)))
+	add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(3,5)))
+	add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(5,5)))
+	add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(7,5)))
 	
 	connect_pieces()
 	
@@ -150,46 +88,48 @@ func _on_check_moves(piece: Piece):
 	currentPiece = piece
 	if (is_player_turn and piece.type == enums.piece_types.PLAYER) or (!is_player_turn and piece.type == enums.piece_types.OPPONENT):
 		show_all_available_moves()
-	
-	
+
 func show_all_available_moves():
 	remove_phantoms()
 	currentPiece.piece_selected()
-	var forwardDirection = get_forward_direction()
+	jumpAvailable = false
+	var move_possibilites: Array = []
 	
-	var phantomLocNE = get_phantom_loc_NE()
-	var phantomLocNW = get_phantom_loc_NW()
-	#var validLocation = is_valid_location(phantomLocNW)
-	var leftCanJump = false
-	var rightCanJump = false
-	print(grid[-1][4])
-	if check_for_jump_right(phantomLocNE):
-		rightCanJump = true
-		phantomLocNE.x += -1
-		phantomLocNE.y += forwardDirection
+	var north_moves = [
+		Vector2(+1,+1),
+		Vector2(-1,+1)
+	]
+	var south_moves = [
+		Vector2(-1,-1),
+		Vector2(+1,-1)
+	]
 	
-	if check_for_jump_left(phantomLocNW):
-		leftCanJump = true
-		phantomLocNW.x += 1
-		phantomLocNW.y += forwardDirection
+	if currentPiece.type == enums.piece_types.PLAYER:
+		move_possibilites.append_array(north_moves)
+	if currentPiece.type == enums.piece_types.OPPONENT:
+		move_possibilites.append_array(south_moves)
+	if currentPiece.isKinged:
+		if currentPiece.type == enums.piece_types.PLAYER:
+			move_possibilites.append_array(south_moves)
+		if currentPiece.type == enums.piece_types.OPPONENT:
+			move_possibilites.append_array(north_moves)
 		
-	#check board bounds and if space is not taken by a piece that's not jumpable(your own/opponent on edge)
+	var pieces: Array = []
+	for move in move_possibilites:
+		pieces.append(get_possibible_moves(move))
+
+	for p: Piece in pieces:
+		if (is_valid_coord(p.grid_position) and !jumpAvailable) or (is_valid_coord(p.grid_position) and p.type == enums.piece_types.PHANTOM_JUMP):
+			p.make_move.connect(_on_make_move.bind(p))
+			add_child(p)
 	
-	var canMove1 = rightCanJump or (!leftCanJump and !rightCanJump)
-	var canMove2 = leftCanJump or (!leftCanJump and !rightCanJump)
-	
-	if phantomLocNE.x >= 0 and phantomLocNE.y < grid_height and phantomLocNE.y >= 0 and grid[phantomLocNE.x][phantomLocNE.y] is String and grid[phantomLocNE.x][phantomLocNE.y] == "" and canMove1:
-		var p1 = Piece.new_piece(enums.piece_types.PHANTOM, phantomLocNE)
-		p1.make_move.connect(_on_make_move.bind(p1))
-		add_child(p1)
-		
-	if phantomLocNW.x < grid_width and phantomLocNW.y < grid_height and phantomLocNW.y >= 0 and grid[phantomLocNW.x][phantomLocNW.y] is String and grid[phantomLocNW.x][phantomLocNW.y] == "" and canMove2:
-		var p2 = Piece.new_piece(enums.piece_types.PHANTOM, phantomLocNW)
-		p2.make_move.connect(_on_make_move.bind(p2))
-		add_child(p2)
-	
-	
-	
+func get_possibible_moves(v:Vector2) -> Piece:
+	var p = Piece.new_piece(enums.piece_types.PHANTOM, Vector2(currentPiece.grid_position.x+v.x,currentPiece.grid_position.y+v.y))
+	if !is_valid_coord(p.grid_position):
+		p = Piece.new_piece(enums.piece_types.PHANTOM_JUMP, Vector2(currentPiece.grid_position.x+v.x+v.x,currentPiece.grid_position.y+v.y+v.y))
+		if !jumpAvailable:
+			jumpAvailable = is_valid_coord(p.grid_position)
+	return p
 	
 func _on_make_move(piece: Piece):
 	remove_phantoms()
@@ -208,7 +148,7 @@ func _on_make_move(piece: Piece):
 func remove_phantoms():
 	for child in get_children():
 		if child is Piece:
-			if child.type == enums.piece_types.PHANTOM:
+			if child.type == enums.piece_types.PHANTOM or child.type == enums.piece_types.PHANTOM_JUMP:
 				remove_child(child)
 
 func printGrid():
@@ -267,14 +207,8 @@ func check_win():
 				return			
 	print(str("the winner is ", currentPiece.type))
 
-#func is_valid_coord(vector2: Vector2):
-	#if vector2.x > 0 and vector2.y > 0:
-		#return true
-	#else:
-		#return false
-
-func is_valid_coord(x: int, y: int):
-	if x > 0 and y > 0:
-		return true
-	else:
-		return false
+func is_valid_coord(p: Vector2) -> bool:
+	var result = false
+	if p.x >= 0 and p.x < grid_width and p.y >= 0 and p.y < grid_height and grid[p.x][p.y] is String:
+		result = true
+	return result

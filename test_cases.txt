@@ -1,0 +1,63 @@
+
+	#---------------------
+	#TEST AREA
+	#---------------------
+	
+	#test win
+	#add_child(Piece.new_piece(enums.piece_types.PLAYER, Vector2(0,0)))
+	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(1,1)))
+	
+	#test Multi-jump
+	#add_child(Piece.new_piece(enums.piece_types.PLAYER, Vector2(2,0)))
+	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(3,1)))
+	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(5,3)))
+	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(5,5)))
+	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(1,1)))
+	
+	#corner
+	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(0,0)))
+	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(1,0)))
+	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(2,0)))
+	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(3,0)))
+	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(4,0)))
+	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(0,0)))
+	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(0,1)))
+	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(0,2)))
+	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(0,3)))
+	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(0,4)))
+	
+	#test2
+	#add_child(Piece.new_piece(enums.piece_types.PLAYER, Vector2(0,2)))
+	#add_child(Piece.new_piece(enums.piece_types.PLAYER, Vector2(3,3)))
+	#add_child(Piece.new_piece(enums.piece_types.PLAYER, Vector2(4,2)))
+	#add_child(Piece.new_piece(enums.piece_types.PLAYER, Vector2(6,2)))
+	#
+	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(1,5)))
+	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(2,4)))
+	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(5,5)))
+	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(7,5)))
+	
+	#edge test
+	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(0,0)))
+	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(2,0)))
+	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(4,0)))
+	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(6,0)))
+	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(7,1)))
+	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(0,2)))
+	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(7,3)))
+	
+	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(1,7)))
+	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(3,7)))
+	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(5,7)))
+	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(7,7)))
+	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(0,6)))
+	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(7,5)))
+	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(0,4)))
+	#
+#
+	#add_child(Piece.new_piece(enums.piece_types.PLAYER, Vector2(2,6)))
+	#add_child(Piece.new_piece(enums.piece_types.PLAYER, Vector2(4,6)))
+	#add_child(Piece.new_piece(enums.piece_types.PLAYER, Vector2(6,6)))
+	#add_child(Piece.new_piece(enums.piece_types.PLAYER, Vector2(6,4)))
+	#add_child(Piece.new_piece(enums.piece_types.PLAYER, Vector2(1,5)))
+	#add_child(Piece.new_piece(enums.piece_types.PLAYER, Vector2(1,3)))
