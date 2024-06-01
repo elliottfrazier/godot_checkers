@@ -9,13 +9,15 @@ signal make_move
 var oppMaterial: Material = preload("res://textures/opponent_piece.tres")
 var yourMaterial: Material = preload("res://textures/your_piece.tres")
 var phantomMaterial: Material = preload("res://textures/phantom_piece.tres")
+var killMaterial: Material = preload("res://textures/kill_piece.tres")
 
 const enums = preload("res://scripts/enums.gd")
 
 var type
 var isKinged = false
+var canJump: bool = false
 
-const piece_scene: PackedScene = preload("res://checker_piece.tscn")
+const piece_scene: PackedScene = preload("res://scenes/checker_piece.tscn")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -48,12 +50,19 @@ func apply_materials():
 	match type:
 		enums.piece_types.OPPONENT:
 			$MeshInstance3D.set_surface_override_material(0, oppMaterial)
+			if canJump:
+				$MeshInstance3D.set_surface_override_material(0, killMaterial)
 		enums.piece_types.PLAYER:
 			$MeshInstance3D.set_surface_override_material(0, yourMaterial)
+			if canJump:
+				$MeshInstance3D.set_surface_override_material(0, killMaterial)
 		enums.piece_types.PHANTOM:
 			$MeshInstance3D.set_surface_override_material(0, phantomMaterial)
 		enums.piece_types.PHANTOM_JUMP:
 			$MeshInstance3D.set_surface_override_material(0, phantomMaterial)
+		enums.piece_types.KILL:
+			pass
+	
 
 func place_piece():
 	$placePieceStream.play()

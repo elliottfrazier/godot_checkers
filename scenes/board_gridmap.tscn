@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://d3dxwg58gt7fd"]
+
+[ext_resource type="MeshLibrary" uid="uid://bprsx7rhq71o6" path="res://misc/board_tiles.tres" id="1_dduox"]
+[ext_resource type="Script" path="res://scripts/board.gd" id="2_lsnmw"]
+
+[node name="BoardGridMap" type="GridMap"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, -4)
+mesh_library = ExtResource("1_dduox")
+cell_size = Vector3(1, 1, 1)
+script = ExtResource("2_lsnmw")
+metadata/_editor_floor_ = Vector3(0, 0, 0)

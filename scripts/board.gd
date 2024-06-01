@@ -9,6 +9,7 @@ var grid_height = 8
 var currentPiece: Piece
 var is_player_turn: bool = true
 var jumpAvailable: bool = false
+var piece_mid_jump: Piece
 
 const enums = preload("res://scripts/enums.gd")
 
@@ -73,15 +74,6 @@ func reset_pieces():
 	add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(5,5)))
 	add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(7,5)))
 	
-	
-	
-	#test Multi-jump
-	#add_child(Piece.new_piece(enums.piece_types.PLAYER, Vector2(2,0)))
-	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(3,1)))
-	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(5,3)))
-	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(5,5)))
-	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(1,1)))
-	
 	wire_pieces_to_board()
 	
 func wire_pieces_to_board():
@@ -92,10 +84,12 @@ func wire_pieces_to_board():
 
 func _on_check_moves(piece: Piece):
 	#prevent showing moves for phantoms - clicking phantoms should instead trigger the move, not show moves
-	if (is_player_turn and piece.type == enums.piece_types.PLAYER) or (!is_player_turn and piece.type == enums.piece_types.OPPONENT):
+	if (piece_mid_jump == null or piece == piece_mid_jump) and (jumpAvailable and piece.canJump) or !jumpAvailable and ((is_player_turn and piece.type == enums.piece_types.PLAYER) or (!is_player_turn and piece.type == enums.piece_types.OPPONENT)):
 		currentPiece = piece
 		currentPiece.piece_selected()
 		show_all_available_moves()
+	else:
+		remove_phantoms()
 
 func show_all_available_moves():
 	#resets for clicking a new piece
@@ -103,24 +97,25 @@ func show_all_available_moves():
 	jumpAvailable = false
 	
 	#returns all valid move placements
-	var pieces = get_possibible_moves()
+	var pieces = get_possibible_moves(currentPiece)
 	
 	#show all valid moves
 	for p: Piece in pieces:
 		p.make_move.connect(_on_make_move.bind(p))
 		add_child(p)
 
-func get_directional_phantom_piece(v:Vector2) -> Piece:
+func get_directional_phantom_piece(parentPiece: Piece, v:Vector2) -> Piece:
 	var finalPiece: Piece = null
-	var p = Piece.new_piece(enums.piece_types.PHANTOM, Vector2(currentPiece.grid_position.x+v.x,currentPiece.grid_position.y+v.y))
+	var p = Piece.new_piece(enums.piece_types.PHANTOM, Vector2(parentPiece.grid_position.x+v.x,parentPiece.grid_position.y+v.y))
 	if is_valid_coord(p.grid_position) and no_obstructions(p.grid_position):
 		finalPiece = p
 	else:
-		if is_valid_coord(p.grid_position) and opponent_within_poximity(p.grid_position): #check if piece was in bounds - no point in checking past that point if its not
-			p = Piece.new_piece(enums.piece_types.PHANTOM_JUMP, Vector2(currentPiece.grid_position.x+v.x+v.x,currentPiece.grid_position.y+v.y+v.y))
+		if is_valid_coord(p.grid_position) and opponent_within_poximity(parentPiece.type, p.grid_position): #check if piece was in bounds - no point in checking past that point if its not
+			p = Piece.new_piece(enums.piece_types.PHANTOM_JUMP, Vector2(parentPiece.grid_position.x+v.x+v.x,parentPiece.grid_position.y+v.y+v.y))
 			if is_valid_coord(p.grid_position) and no_obstructions(p.grid_position):
 				if is_valid_coord(p.grid_position):
 					finalPiece = p
+					finalPiece.canJump = true
 					if !jumpAvailable:
 						jumpAvailable = true
 				else: 
@@ -129,7 +124,7 @@ func get_directional_phantom_piece(v:Vector2) -> Piece:
 				finalPiece = null
 	return finalPiece
 
-func get_possibible_moves() -> Array:
+func get_possibible_moves(piece: Piece) -> Array:
 	#All possible starting directions
 	var move_possibilites: Array = []
 	var northward_moves = [
@@ -142,22 +137,22 @@ func get_possibible_moves() -> Array:
 	]
 	
 	#assign directional movement based on player type since they move in opposing directions
-	if currentPiece.type == enums.piece_types.PLAYER:
+	if piece.type == enums.piece_types.PLAYER:
 		move_possibilites.append_array(northward_moves)
-	if currentPiece.type == enums.piece_types.OPPONENT:
+	if piece.type == enums.piece_types.OPPONENT:
 		move_possibilites.append_array(southward_moves)
 	
 	#add the addition movement direction once kinged
-	if currentPiece.isKinged:
-		if currentPiece.type == enums.piece_types.PLAYER:
+	if piece.isKinged:
+		if piece.type == enums.piece_types.PLAYER:
 			move_possibilites.append_array(southward_moves)
-		if currentPiece.type == enums.piece_types.OPPONENT:
+		if piece.type == enums.piece_types.OPPONENT:
 			move_possibilites.append_array(northward_moves)
 	
 	#get all possible, non-blocked, moves
 	var non_blocked_pieces: Array = []
 	for move in move_possibilites:
-		var phantom = get_directional_phantom_piece(move)
+		var phantom = get_directional_phantom_piece(piece, move)
 		if phantom != null:
 			non_blocked_pieces.append(phantom)
 	
@@ -179,13 +174,18 @@ func _on_make_move(piece: Piece):
 	sync_movement_with_virtual_board(piece)
 	check_win()
 	
-	get_possibible_moves() #reruns the simulation for possible moves - sets jumpAvailable = true if there are available jumps to make
+	get_possibible_moves(currentPiece) #reruns the simulation for possible moves - sets jumpAvailable = true if there are available jumps to make
+	clear_required_jumps()
 	
 	if jumpedPiece and jumpAvailable: #this allows for double, triple, etc. jumps
 		show_all_available_moves()
+		piece_mid_jump = piece
 	else:
+		piece_mid_jump = null
+		jumpAvailable = false
 		check_if_kinged()
 		change_turn()
+		check_for_jumps()
 	
 	
 func remove_phantoms():
@@ -243,8 +243,8 @@ func is_valid_coord(p: Vector2) -> bool:
 func no_obstructions(p: Vector2) -> bool:
 	return grid[p.x][p.y] is String# or grid[p.x][p.y] != currentPiece.type
 
-func opponent_within_poximity(p: Vector2) -> bool:
-	return grid[p.x][p.y] is int and grid[p.x][p.y] != currentPiece.type
+func opponent_within_poximity(friendlyType: enums.piece_types, p: Vector2) -> bool:
+	return grid[p.x][p.y] is int and grid[p.x][p.y] != friendlyType
 	
 func check_if_kinged():
 	if currentPiece.type == enums.piece_types.PLAYER and currentPiece.grid_position.y == grid_height-1:
@@ -256,4 +256,19 @@ func sync_movement_with_virtual_board(piece: Piece):
 	grid[currentPiece.grid_position.x][currentPiece.grid_position.y] = ""
 	grid[piece.grid_position.x][piece.grid_position.y] = currentPiece.type
 	currentPiece.set_pos_from_grid(piece.grid_position)
-	
+
+func check_for_jumps():
+	var all_children = get_children()
+	for child in all_children:
+		if child is Piece and (is_player_turn and child.type == enums.piece_types.PLAYER) or (!is_player_turn and child.type == enums.piece_types.OPPONENT):
+			var moves = get_possibible_moves(child)
+			for m:Piece in moves:
+				if m.canJump:
+					child.canJump = true
+					child.apply_materials()
+
+func clear_required_jumps():		
+	for child in get_children():
+		if child is Piece:
+			child.canJump = false
+			child.apply_materials()
