@@ -1,0 +1,7 @@
+TODO list:
+-start screen
+-settings
+-king indicator
+-required jump piece material update
+-finish game over screen
+-sounds

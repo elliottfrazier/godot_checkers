@@ -1,0 +1,7 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://bxf5ppg1jpcmc"]
+
+[ext_resource type="Shader" path="res://textures/required_jump.gdshader" id="1_vmo7t"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_vmo7t")

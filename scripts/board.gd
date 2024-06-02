@@ -12,6 +12,7 @@ var jumpAvailable: bool = false
 var piece_mid_jump: Piece
 
 const enums = preload("res://scripts/enums.gd")
+const globalLogic = preload("res://scripts/global.gd")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -233,6 +234,10 @@ func check_win():
 			if child.type != currentPiece.type:
 				return			
 	print(str("the winner is ", currentPiece.type))
+	Global.winner_piece.position = currentPiece.position
+	Global.winner_piece.type = currentPiece.type
+	get_tree().change_scene_to_file("res://scenes/game_over.tscn")
+	
 
 func is_valid_coord(p: Vector2) -> bool:
 	var result = false
