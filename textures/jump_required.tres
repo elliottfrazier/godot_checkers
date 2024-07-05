@@ -1,0 +1,9 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://bi4yj3b2i4xnt"]
+
+[ext_resource type="Shader" path="res://textures/required_jump.gdshader" id="1_1nbff"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_1nbff")
+shader_parameter/outline_color = Vector4(1, 0, 0, 1)
+shader_parameter/outline_width = 4.0

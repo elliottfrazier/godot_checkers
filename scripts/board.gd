@@ -75,6 +75,7 @@ func reset_pieces():
 	add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(5,5)))
 	add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(7,5)))
 	
+	
 	wire_pieces_to_board()
 	
 func wire_pieces_to_board():
@@ -90,7 +91,9 @@ func _on_check_moves(piece: Piece):
 		currentPiece.piece_selected()
 		show_all_available_moves()
 	else:
-		remove_phantoms()
+		currentPiece.piece_invalid()
+		if piece_mid_jump == null:
+			remove_phantoms()
 
 func show_all_available_moves():
 	#resets for clicking a new piece

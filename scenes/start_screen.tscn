@@ -7,3 +7,23 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 83.0
+offset_top = -123.0
+offset_right = 238.0
+offset_bottom = -57.0
+grow_vertical = 0
+scale = Vector2(1.12, 1)
+
+[node name="Label" type="Label" parent="Button"]
+layout_mode = 0
+offset_right = 155.0
+offset_bottom = 66.0
+text = "Start Game"
+horizontal_alignment = 1
+vertical_alignment = 1

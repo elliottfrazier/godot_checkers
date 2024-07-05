@@ -1,0 +1,7 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://c0f6qvarbvrpn"]
+
+[ext_resource type="Material" uid="uid://bi4yj3b2i4xnt" path="res://textures/jump_required.tres" id="1_7wdve"]
+
+[resource]
+next_pass = ExtResource("1_7wdve")
+albedo_color = Color(0, 0.298039, 0.380392, 1)

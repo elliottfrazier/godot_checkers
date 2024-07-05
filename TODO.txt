@@ -5,3 +5,6 @@ TODO list:
 -required jump piece material update
 -finish game over screen
 -sounds
+
+bugs:
+-clicking off a piece mid-multijump soft-locks the game

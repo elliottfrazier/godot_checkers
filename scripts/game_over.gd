@@ -32,9 +32,9 @@ func _ready():
 	#var err = anim_lib.add_animation("winner", animation)
 	#
 	#anim_player.play("game_over/winner")
-
-
-	anim_player.play("game_over/winner_showcase")
+#
+#
+	#anim_player.play("game_over/winner_showcase")
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	pass

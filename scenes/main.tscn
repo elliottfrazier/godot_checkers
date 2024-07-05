@@ -1,7 +1,8 @@
-[gd_scene load_steps=12 format=3 uid="uid://ddkwga1lmhp0p"]
+[gd_scene load_steps=13 format=3 uid="uid://ddkwga1lmhp0p"]
 
 [ext_resource type="Script" path="res://scripts/camera.gd" id="1_26htq"]
 [ext_resource type="PackedScene" uid="uid://d3dxwg58gt7fd" path="res://scenes/board_gridmap.tscn" id="1_127t7"]
+[ext_resource type="PackedScene" uid="uid://ri3ugwq7luu5" path="res://scenes/start_screen.tscn" id="4_3fygh"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_k3jls"]
 sky_top_color = Color(0.301961, 0.694118, 0.792157, 1)
@@ -193,5 +194,8 @@ transform = Transform3D(-1, 0, 2.53518e-06, 0, 1, 0, -2.53518e-06, 0, -1, 0, 0, 
 
 [node name="Camera3D" type="Camera3D" parent="CameraCenter"]
 transform = Transform3D(-1, 1.26759e-06, -2.19553e-06, 0, 0.866025, 0.5, 2.53518e-06, 0.5, -0.866025, 0, 6, -9)
-fov = 54.7
+fov = 50.0
 script = ExtResource("1_26htq")
+
+[node name="Control" parent="." instance=ExtResource("4_3fygh")]
+visible = false

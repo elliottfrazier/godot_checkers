@@ -5,11 +5,13 @@ signal check_moves
 signal make_move
 
 @export var grid_position: Vector2
+@export var mesh: MeshInstance3D
 
 var oppMaterial: Material = preload("res://textures/opponent_piece.tres")
-var yourMaterial: Material = preload("res://textures/your_piece.tres")
+var yourMaterial: Material = preload("res://textures/player_piece.tres")
 var phantomMaterial: Material = preload("res://textures/phantom_piece.tres")
-var killMaterial: Material = preload("res://textures/kill_piece.tres")
+var playerJumpMaterial: Material = preload("res://textures/player_jump_piece.tres")
+var opponentJumpMaterial: Material = preload("res://textures/opponent_jump_piece.tres")
 
 const enums = preload("res://scripts/enums.gd")
 
@@ -49,17 +51,17 @@ func piece_clicked():
 func apply_materials():
 	match type:
 		enums.piece_types.OPPONENT:
-			$MeshInstance3D.set_surface_override_material(0, oppMaterial)
+			mesh.set_surface_override_material(0, oppMaterial)
 			if canJump:
-				$MeshInstance3D.set_surface_override_material(0, killMaterial)
+				mesh.set_surface_override_material(0, opponentJumpMaterial)
 		enums.piece_types.PLAYER:
-			$MeshInstance3D.set_surface_override_material(0, yourMaterial)
+			mesh.set_surface_override_material(0, yourMaterial)
 			if canJump:
-				$MeshInstance3D.set_surface_override_material(0, killMaterial)
+				mesh.set_surface_override_material(0, playerJumpMaterial)
 		enums.piece_types.PHANTOM:
-			$MeshInstance3D.set_surface_override_material(0, phantomMaterial)
+			mesh.set_surface_override_material(0, phantomMaterial)
 		enums.piece_types.PHANTOM_JUMP:
-			$MeshInstance3D.set_surface_override_material(0, phantomMaterial)
+			mesh.set_surface_override_material(0, phantomMaterial)
 		enums.piece_types.KILL:
 			pass
 	
@@ -69,3 +71,16 @@ func place_piece():
 	
 func piece_selected():
 	$clickPieceStream.play()
+	
+func piece_invalid():
+	$invalidPieceStream.play()
+	
+func piece_kinged():
+#this method is not being called anywhere right now
+#not showing new mesh in scene - idk why
+	var kingTopper: MeshInstance3D = MeshInstance3D.new()
+	kingTopper.position = mesh.position
+	kingTopper.set_surface_override_material(0,mesh.get_surface_override_material(0))
+	kingTopper.position.y += 2
+	add_child(kingTopper)
+	
