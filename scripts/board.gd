@@ -1,3 +1,4 @@
+class_name Board
 extends GridMap
 
 @export var animationPlayer: AnimationPlayer
@@ -12,13 +13,15 @@ var jumpAvailable: bool = false
 var piece_mid_jump: Piece
 
 const enums = preload("res://scripts/enums.gd")
-const globalLogic = preload("res://scripts/global.gd")
+const globalLogic = preload("res://scripts/global.gd") #TODO: can this be removed since it is defined in project settings? no ref in code
+
+signal current_piece_changed
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	generate_board()
 	setup_pieces()
-	animationPlayer.play("camera/start_game")
+	#animationPlayer.play("camera/start_game")
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -76,6 +79,8 @@ func reset_pieces():
 	add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(7,5)))
 	
 	
+	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(4,2)))
+	#add_child(Piece.new_piece(enums.piece_types.PLAYER, Vector2(6,6)))
 	wire_pieces_to_board()
 	
 func wire_pieces_to_board():
@@ -88,10 +93,13 @@ func _on_check_moves(piece: Piece):
 	#prevent showing moves for phantoms - clicking phantoms should instead trigger the move, not show moves
 	if (piece_mid_jump == null or piece == piece_mid_jump) and (jumpAvailable and piece.canJump) or !jumpAvailable and ((is_player_turn and piece.type == enums.piece_types.PLAYER) or (!is_player_turn and piece.type == enums.piece_types.OPPONENT)):
 		currentPiece = piece
+		#current_piece_changed.emit()
+		emit_signal("current_piece_changed", piece)
+		
 		currentPiece.piece_selected()
 		show_all_available_moves()
 	else:
-		currentPiece.piece_invalid()
+		piece.piece_invalid()
 		if piece_mid_jump == null:
 			remove_phantoms()
 
@@ -219,6 +227,7 @@ func try_make_jump(piece: Piece) -> bool:
 
 func change_turn():
 	if is_player_turn:
+		emit_signal("current_piece_changed", currentPiece)
 		is_player_turn = false
 		animationPlayer.play("camera/rotate_camera_opponent")
 	else:
@@ -257,8 +266,10 @@ func opponent_within_poximity(friendlyType: enums.piece_types, p: Vector2) -> bo
 func check_if_kinged():
 	if currentPiece.type == enums.piece_types.PLAYER and currentPiece.grid_position.y == grid_height-1:
 		currentPiece.isKinged = true;
+		currentPiece.piece_kinged();
 	elif currentPiece.type == enums.piece_types.OPPONENT and currentPiece.grid_position.y == 0:
 		currentPiece.isKinged = true;
+		currentPiece.piece_kinged();
 		
 func sync_movement_with_virtual_board(piece: Piece):
 	grid[currentPiece.grid_position.x][currentPiece.grid_position.y] = ""

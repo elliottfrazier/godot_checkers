@@ -1,0 +1,42 @@
+[gd_scene load_steps=4 format=3 uid="uid://22p3eawbrqi3"]
+
+[ext_resource type="PackedScene" uid="uid://bfbv7nhwegofl" path="res://scenes/checker_piece.tscn" id="1_jo3tm"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_lr42n"]
+viewport_path = NodePath("Sprite2D/SubViewport")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m1nsf"]
+bg_color = Color(1, 0.337255, 0.337255, 1)
+
+[node name="CenterContainer" type="CenterContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(255, 247)
+texture = SubResource("ViewportTexture_lr42n")
+
+[node name="SubViewport" type="SubViewport" parent="Sprite2D"]
+transparent_bg = true
+
+[node name="Camera3D" type="Camera3D" parent="Sprite2D/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 1, 1)
+fov = 43.8
+
+[node name="checker_piece" parent="Sprite2D/SubViewport" instance=ExtResource("1_jo3tm")]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Sprite2D/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.20553, -0.0709734)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="Sprite2D/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3286, 0.913873)
+light_energy = 1.435
+light_size = 1.09
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(500, 500)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_m1nsf")

@@ -1,24 +1,11 @@
-[gd_scene load_steps=10 format=3 uid="uid://bfbv7nhwegofl"]
+[gd_scene load_steps=7 format=3 uid="uid://bfbv7nhwegofl"]
 
 [ext_resource type="Script" path="res://scripts/checker_piece.gd" id="1_yqcea"]
-[ext_resource type="Shader" path="res://textures/required_jump.gdshader" id="2_gtoau"]
 [ext_resource type="AudioStream" uid="uid://ouvi1c1o1rp1" path="res://soundFX/place_piece.mp3" id="2_o0p8h"]
 [ext_resource type="AudioStream" uid="uid://bsny8shksui74" path="res://soundFX/click_piece.mp3" id="3_qpliu"]
 [ext_resource type="AudioStream" uid="uid://xd6nc18rpr0p" path="res://soundFX/invalid_piece.mp3" id="5_x13wu"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_bxq0p"]
-render_priority = 0
-shader = ExtResource("2_gtoau")
-shader_parameter/shine_color = Color(1, 1, 1, 1)
-shader_parameter/cycle_interval = 1.0
-shader_parameter/shine_speed = 3.0
-shader_parameter/shine_width = 3.0
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4rrja"]
-next_pass = SubResource("ShaderMaterial_bxq0p")
-
 [sub_resource type="CylinderMesh" id="CylinderMesh_pfi3p"]
-material = SubResource("StandardMaterial3D_4rrja")
 top_radius = 0.4
 bottom_radius = 0.4
 height = 0.2
@@ -27,17 +14,21 @@ height = 0.2
 height = 0.2
 radius = 0.4
 
-[node name="checker_piece" type="StaticBody3D" node_paths=PackedStringArray("mesh")]
+[node name="checker_piece" type="StaticBody3D" node_paths=PackedStringArray("mesh", "kingMesh", "placePieceStream", "clickPieceStream", "invalidPieceStream")]
 script = ExtResource("1_yqcea")
-mesh = NodePath("MeshInstance3D")
+mesh = NodePath("piece")
+kingMesh = NodePath("king")
+placePieceStream = NodePath("placePieceStream")
+clickPieceStream = NodePath("clickPieceStream")
+invalidPieceStream = NodePath("invalidPieceStream")
 
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+[node name="king" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.21, 0)
 visible = false
 mesh = SubResource("CylinderMesh_pfi3p")
-skeleton = NodePath("../MeshInstance3D")
+skeleton = NodePath("../piece")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+[node name="piece" type="MeshInstance3D" parent="."]
 mesh = SubResource("CylinderMesh_pfi3p")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
@@ -45,17 +36,12 @@ shape = SubResource("CylinderShape3D_7wv47")
 
 [node name="placePieceStream" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource("2_o0p8h")
+volume_db = 1.0
 
 [node name="clickPieceStream" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource("3_qpliu")
+volume_db = 5.0
 
 [node name="invalidPieceStream" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource("5_x13wu")
-
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 1, 2)
-visible = false
-
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.5, 0.866025, 0, -0.866025, 0.5, 0, 3, 1)
-visible = false
+volume_db = 4.0

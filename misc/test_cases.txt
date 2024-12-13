@@ -61,3 +61,8 @@
 	#add_child(Piece.new_piece(enums.piece_types.PLAYER, Vector2(6,4)))
 	#add_child(Piece.new_piece(enums.piece_types.PLAYER, Vector2(1,5)))
 	#add_child(Piece.new_piece(enums.piece_types.PLAYER, Vector2(1,3)))
+
+	#kinging/kinged
+	#add_child(Piece.new_piece(enums.piece_types.OPPONENT, Vector2(0,4)))
+	#add_child(Piece.new_piece(enums.piece_types.PLAYER, Vector2(1,3)))
+

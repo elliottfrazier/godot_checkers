@@ -6,6 +6,11 @@ signal make_move
 
 @export var grid_position: Vector2
 @export var mesh: MeshInstance3D
+@export var kingMesh: MeshInstance3D
+
+@export var placePieceStream: AudioStreamPlayer3D
+@export var clickPieceStream: AudioStreamPlayer3D
+@export var invalidPieceStream: AudioStreamPlayer3D
 
 var oppMaterial: Material = preload("res://textures/opponent_piece.tres")
 var yourMaterial: Material = preload("res://textures/player_piece.tres")
@@ -52,35 +57,40 @@ func apply_materials():
 	match type:
 		enums.piece_types.OPPONENT:
 			mesh.set_surface_override_material(0, oppMaterial)
+			kingMesh.set_surface_override_material(0, oppMaterial)
 			if canJump:
 				mesh.set_surface_override_material(0, opponentJumpMaterial)
+				kingMesh.set_surface_override_material(0, opponentJumpMaterial)
 		enums.piece_types.PLAYER:
 			mesh.set_surface_override_material(0, yourMaterial)
+			kingMesh.set_surface_override_material(0, yourMaterial)
 			if canJump:
 				mesh.set_surface_override_material(0, playerJumpMaterial)
+				kingMesh.set_surface_override_material(0, playerJumpMaterial)
 		enums.piece_types.PHANTOM:
 			mesh.set_surface_override_material(0, phantomMaterial)
+			kingMesh.set_surface_override_material(0, phantomMaterial)
 		enums.piece_types.PHANTOM_JUMP:
 			mesh.set_surface_override_material(0, phantomMaterial)
+			kingMesh.set_surface_override_material(0, phantomMaterial)
 		enums.piece_types.KILL:
 			pass
 	
 
 func place_piece():
-	$placePieceStream.play()
+	placePieceStream.play()
 	
 func piece_selected():
-	$clickPieceStream.play()
+	clickPieceStream.play()
 	
 func piece_invalid():
-	$invalidPieceStream.play()
+	invalidPieceStream.play()
 	
 func piece_kinged():
 #this method is not being called anywhere right now
 #not showing new mesh in scene - idk why
-	var kingTopper: MeshInstance3D = MeshInstance3D.new()
-	kingTopper.position = mesh.position
-	kingTopper.set_surface_override_material(0,mesh.get_surface_override_material(0))
-	kingTopper.position.y += 2
-	add_child(kingTopper)
+	kingMesh.show()
 	
+func set_type(newType: enums.piece_types):
+	type = newType
+	apply_materials()

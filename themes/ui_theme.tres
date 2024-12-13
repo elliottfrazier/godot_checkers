@@ -1,0 +1,22 @@
+[gd_resource type="Theme" load_steps=5 format=3 uid="uid://ck0val5p8531w"]
+
+[ext_resource type="StyleBox" uid="uid://ci7jnurygecj2" path="res://UIResources/panel_primary.tres" id="1_4kch7"]
+[ext_resource type="StyleBox" uid="uid://huycwrtail15" path="res://UIResources/button_primary.tres" id="1_xvxy6"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5a8y5"]
+content_margin_bottom = 10.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1noqi"]
+bg_color = Color(0.235294, 0.682353, 0.627451, 1)
+
+[resource]
+Button/font_sizes/font_size = 24
+Button/styles/normal = ExtResource("1_xvxy6")
+Label/colors/font_color = Color(0, 0, 0, 1)
+Label/font_sizes/font_size = 28
+Label/fonts/font = null
+Label/styles/normal = SubResource("StyleBoxEmpty_5a8y5")
+NewGameButton/base_type = &"Button"
+NewGameButton/styles/normal = SubResource("StyleBoxFlat_1noqi")
+PanelContainer/styles/panel = ExtResource("1_4kch7")
+VBoxContainer/constants/separation = 10

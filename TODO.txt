@@ -1,10 +1,11 @@
 TODO list:
--start screen
--settings
--king indicator
--required jump piece material update
+
 -finish game over screen
--sounds
+-seperate game logic from board logic
+-add settings to game screen
+-add UI to game screen
+	-settings
+	-current turn
+	-hint message (e.g. "jump required")
 
 bugs:
--clicking off a piece mid-multijump soft-locks the game

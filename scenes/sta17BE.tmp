@@ -1,19 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://ri3ugwq7luu5"]
+[gd_scene load_steps=4 format=3 uid="uid://ri3ugwq7luu5"]
 
 [ext_resource type="Theme" uid="uid://ck0val5p8531w" path="res://themes/ui_theme.tres" id="1_04tl5"]
 [ext_resource type="Script" path="res://scripts/start_screen.gd" id="1_fbwvf"]
 [ext_resource type="AudioStream" uid="uid://bmx2n7yha0npj" path="res://soundFX/bg_jazz.mp3" id="3_lqqem"]
-[ext_resource type="AudioStream" uid="uid://bsny8shksui74" path="res://soundFX/click_piece.mp3" id="4_i2ya7"]
 
-[sub_resource type="FontVariation" id="FontVariation_l7dka"]
-spacing_bottom = -10
-
-[sub_resource type="LabelSettings" id="LabelSettings_tdcuf"]
-font = SubResource("FontVariation_l7dka")
-font_size = 28
-font_color = Color(0, 0, 0, 1)
-
-[node name="StartScreen" type="CenterContainer" node_paths=PackedStringArray("MenuOptions", "SettingsOptions", "GameModes", "AudioPlayer", "buttonSoundStream")]
+[node name="CenterContainer" type="CenterContainer" node_paths=PackedStringArray("MenuOptions", "SettingsOptions", "AudioPlayer")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -22,9 +13,7 @@ grow_vertical = 2
 script = ExtResource("1_fbwvf")
 MenuOptions = NodePath("PanelContainer/MenuOptions")
 SettingsOptions = NodePath("PanelContainer/SettingsOptions")
-GameModes = NodePath("PanelContainer/GameModeOptions")
 AudioPlayer = NodePath("AudioStreamPlayer")
-buttonSoundStream = NodePath("ButtonClick")
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
 custom_minimum_size = Vector2(200, 0)
@@ -34,12 +23,6 @@ theme = ExtResource("1_04tl5")
 [node name="MenuOptions" type="VBoxContainer" parent="PanelContainer"]
 layout_mode = 2
 theme = ExtResource("1_04tl5")
-
-[node name="Label" type="Label" parent="PanelContainer/MenuOptions"]
-layout_mode = 2
-text = "Checkers 3D"
-label_settings = SubResource("LabelSettings_tdcuf")
-horizontal_alignment = 1
 
 [node name="Start" type="Button" parent="PanelContainer/MenuOptions"]
 layout_mode = 2
@@ -56,11 +39,9 @@ text = "Exit"
 [node name="SettingsOptions" type="VBoxContainer" parent="PanelContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="PanelContainer/SettingsOptions"]
+[node name="Settings" type="Button" parent="PanelContainer/SettingsOptions"]
 layout_mode = 2
 text = "Settings"
-label_settings = SubResource("LabelSettings_tdcuf")
-horizontal_alignment = 1
 
 [node name="GridContainer" type="GridContainer" parent="PanelContainer/SettingsOptions"]
 layout_mode = 2
@@ -88,45 +69,21 @@ size_flags_horizontal = 3
 theme = ExtResource("1_04tl5")
 value = 75.0
 
-[node name="Back" type="Button" parent="PanelContainer/SettingsOptions"]
+[node name="Back" type="Button" parent="PanelContainer/SettingsOptions/GridContainer"]
 layout_mode = 2
-text = "Back"
+text = "<"
 
-[node name="GameModeOptions" type="VBoxContainer" parent="PanelContainer"]
+[node name="Apply" type="Button" parent="PanelContainer/SettingsOptions/GridContainer"]
 layout_mode = 2
-theme = ExtResource("1_04tl5")
-
-[node name="Label" type="Label" parent="PanelContainer/GameModeOptions"]
-layout_mode = 2
-text = "Game Mode"
-label_settings = SubResource("LabelSettings_tdcuf")
-horizontal_alignment = 1
-
-[node name="SinglePlayer" type="Button" parent="PanelContainer/GameModeOptions"]
-layout_mode = 2
-text = "Single Player"
-
-[node name="TwoPlayer" type="Button" parent="PanelContainer/GameModeOptions"]
-layout_mode = 2
-text = "Two Player"
-
-[node name="Back" type="Button" parent="PanelContainer/GameModeOptions"]
-layout_mode = 2
-text = "Back"
+text = "Apply"
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("3_lqqem")
 volume_db = -20.293
 autoplay = true
 
-[node name="ButtonClick" type="AudioStreamPlayer3D" parent="."]
-stream = ExtResource("4_i2ya7")
-volume_db = 38.758
-
 [connection signal="pressed" from="PanelContainer/MenuOptions/Start" to="." method="_on_start_pressed"]
 [connection signal="pressed" from="PanelContainer/MenuOptions/Settings" to="." method="_on_settings_pressed"]
 [connection signal="pressed" from="PanelContainer/MenuOptions/Exit" to="." method="_on_exit_pressed"]
 [connection signal="value_changed" from="PanelContainer/SettingsOptions/GridContainer/HSlider" to="." method="_on_h_slider_value_changed"]
-[connection signal="pressed" from="PanelContainer/SettingsOptions/Back" to="." method="_on_back_pressed"]
-[connection signal="pressed" from="PanelContainer/GameModeOptions/SinglePlayer" to="." method="_on_single_player_pressed"]
-[connection signal="pressed" from="PanelContainer/GameModeOptions/Back" to="." method="_on_back_pressed"]
+[connection signal="pressed" from="PanelContainer/SettingsOptions/GridContainer/Back" to="." method="_on_back_pressed"]
